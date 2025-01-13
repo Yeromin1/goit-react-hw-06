@@ -16,15 +16,12 @@ const ContactForm = ({ onAddContact }) => {
         /^\d{3}-\d{2}-\d{2}$/,
         "Phone number must be in the format XXX-XX-XX"
       )
-      // .min(7, "Number must be at least 7 digits")
-      // .max(9, "Number must be less than 8 digits")
       .required("Number is required"),
   });
 
   const formatPhone = (phoneValue) => {
     phoneValue = phoneValue.replace(/\D/g, ""); // Убираем символы
 
-    // Форматируем номер телефона с дефисами
     if (phoneValue.length <= 3) {
       return phoneValue.replace(/(\d{3})(\d{0,2})/, "$1-$2");
     } else if (phoneValue.length <= 5) {
