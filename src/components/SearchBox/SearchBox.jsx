@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import { changeFilter } from "../../redux/filtersSlice";
 import styles from "./SearchBox.module.css";
 
-function SearchBox({ value }) {
+function SearchBox() {
   const dispatch = useDispatch();
 
   const handleFilterChange = (e) => {
@@ -15,9 +15,8 @@ function SearchBox({ value }) {
       <input
         className={styles.input}
         type="text"
-        value={value}
         onChange={handleFilterChange}
-        placeholder=""
+        placeholder="Search..."
       />
     </div>
   );

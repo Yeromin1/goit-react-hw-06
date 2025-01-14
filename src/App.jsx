@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import { addContact, deleteContact } from "./redux/contactsSlice";
-import { changeFilter } from "./redux/filtersSlice";
 import ContactForm from "./components/ContactForm/ContactForm";
 import SearchBox from "./components/SearchBox/SearchBox";
 import ContactList from "./components/ContactList/ContactList";
@@ -26,10 +25,7 @@ function App() {
     <div>
       <h1>Phonebook</h1>
       <ContactForm onAddContact={handleAddContact} />
-      <SearchBox
-        value={filter}
-        onChange={(e) => dispatch(changeFilter(e.target.value))}
-      />
+      <SearchBox />
       <ContactList
         contacts={filteredContacts}
         onDeleteContact={handleDeleteContact}

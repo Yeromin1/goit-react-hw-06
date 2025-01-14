@@ -1,7 +1,15 @@
+import { useDispatch } from "react-redux";
 import { ContactRound, Phone } from "lucide-react";
+import { deleteContact } from "../../redux/contactsSlice";
 import styles from "./Contact.module.css";
 
-const Contact = ({ id, name, number, onDelete }) => {
+const Contact = ({ id, name, number }) => {
+  const dispatch = useDispatch();
+
+  const handleDelete = () => {
+    dispatch(deleteContact(id));
+  };
+
   return (
     <li className={styles.contact}>
       <p className={styles.text}>
@@ -12,7 +20,7 @@ const Contact = ({ id, name, number, onDelete }) => {
           <Phone className={styles.icon} /> {number}
         </span>
       </p>
-      <button onClick={() => onDelete(id)}>Delete</button>
+      <button onClick={handleDelete}>Delete</button>
     </li>
   );
 };

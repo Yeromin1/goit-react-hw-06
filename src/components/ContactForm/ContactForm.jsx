@@ -1,10 +1,11 @@
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addContact } from "../../redux/contactsSlice";
 import styles from "./ContactForm.module.css";
 
-const ContactForm = ({ onAddContact }) => {
-  const [phone, setPhone] = useState("");
+const ContactForm = () => {
+  const dispatch = useDispatch();
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -20,39 +21,36 @@ const ContactForm = ({ onAddContact }) => {
   });
 
   const formatPhone = (phoneValue) => {
-    phoneValue = phoneValue.replace(/\D/g, ""); // Убираем символы
-
+    phoneValue = phoneValue.replace(/\D/g, "");
     if (phoneValue.length <= 3) {
       return phoneValue.replace(/(\d{3})(\d{0,2})/, "$1-$2");
     } else if (phoneValue.length <= 5) {
       return phoneValue.replace(/(\d{3})(\d{2})(\d{0,2})/, "$1-$2-$3");
-    } else if (phoneValue.length <= 7) {
-      return phoneValue.replace(/(\d{3})(\d{2})(\d{2})(\d{0,2})/, "$1-$2-$3");
     } else {
-      phoneValue = phoneValue.slice(0, 9);
-      return phoneValue.replace(/(\d{3})(\d{2})(\d{2})(\d{0,2})/, "$1-$2-$3");
+      return phoneValue
+        .slice(0, 9)
+        .replace(/(\d{3})(\d{2})(\d{2})(\d{0,2})/, "$1-$2-$3");
     }
   };
 
   const handlePhoneChange = (e, setFieldValue) => {
     let phoneValue = formatPhone(e.target.value);
-
-    if (phoneValue[phoneValue.length - 1] === "-") {
-      phoneValue = phoneValue.slice(0, -1);
-    }
-
-    setPhone(phoneValue);
     setFieldValue("number", phoneValue);
   };
 
   return (
     <Formik
-      initialValues={{ name: "", number: phone }}
+      initialValues={{ name: "", number: "" }}
       validationSchema={validationSchema}
       onSubmit={(values, { resetForm }) => {
-        onAddContact(values.name, values.number);
+        dispatch(
+          addContact({
+            id: Date.now().toString(),
+            name: values.name,
+            number: values.number,
+          })
+        );
         resetForm();
-        setPhone("");
       }}
     >
       {({ setFieldValue }) => (
@@ -73,7 +71,6 @@ const ContactForm = ({ onAddContact }) => {
             name="number"
             className={styles.input}
             id="number"
-            value={phone}
             onChange={(e) => handlePhoneChange(e, setFieldValue)}
             autoComplete="tel"
           />
